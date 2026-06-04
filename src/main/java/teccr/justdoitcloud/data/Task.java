@@ -1,29 +1,37 @@
 package teccr.justdoitcloud.data;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
-@Table("tasks")
+@NoArgsConstructor
+@Entity
+@Table(name = "tasks")
 public class Task {
-    @Id
-    private final Long id;
-    @Size(min=3, message = "Descripcion debe tener al menos 3 caracteres")
-    private final String description;
-    @Column("created_at")
-    private final LocalDateTime createdAt;
-    private final LocalDate deadline;
-    @NotNull
-    private final Status status;
 
-    @Column("user_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Size(min = 3, message = "Descripcion debe tener al menos 3 caracteres")
+    private String description;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    private LocalDate deadline;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Column(name = "user_id")
     private Long userId;
 
     public enum Status {

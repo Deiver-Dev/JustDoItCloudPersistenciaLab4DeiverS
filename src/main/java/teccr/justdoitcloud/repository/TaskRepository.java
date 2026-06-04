@@ -1,6 +1,7 @@
 package teccr.justdoitcloud.repository;
 
-import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import teccr.justdoitcloud.data.Task;
@@ -19,15 +20,14 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 
 
     @Query("""
-    SELECT *
-    FROM task
-    WHERE user_id = :userId
-      AND status = :status
-      AND due_time >= CURRENT_TIME
-    ORDER BY due_time ASC
-    LIMIT 5
+    SELECT t FROM Task t
+    WHERE t.userId = :userId
+      AND t.status = :status
+      AND t.deadline >= CURRENT_DATE
+    ORDER BY t.deadline ASC
     """)
     List<Task> findTop5UpcomingByUserAndStatus(@Param("userId") Long userId,
-                                               @Param("status") String status);
+                                               @Param("status") Task.Status status,
+                                               Pageable pageable);
 
 }
