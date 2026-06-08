@@ -40,6 +40,8 @@ public class UserTasksController {
         return "usertasks";
     }
 
+
+
     @PostMapping
     public String addTask(@Valid @ModelAttribute(name = "newTask") Task newTask,
                           Errors errors,
@@ -50,6 +52,12 @@ public class UserTasksController {
         }
 
         taskService.addTaskToUser(user, newTask);
+        return "redirect:/user/tasks";
+    }
+
+    @PostMapping("/advance")
+    public String advanceTask(@RequestParam("taskId") Long taskId) {
+        taskService.advanceTaskStatus(taskId);
         return "redirect:/user/tasks";
     }
 }

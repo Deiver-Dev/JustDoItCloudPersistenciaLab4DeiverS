@@ -24,4 +24,22 @@ public class TaskService {
         task.setUserId(user.getId());
         taskRepository.save(task);
     }
+
+    // NUEVO MÉTODO
+    public void advanceTaskStatus(Long taskId) {
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+
+        if (task.getStatus() == Task.Status.PENDING) {
+            task.setStatus(Task.Status.INPROGRESS);
+        }
+        else if (task.getStatus() == Task.Status.INPROGRESS) {
+            task.setStatus(Task.Status.DONE);
+        }
+
+        taskRepository.save(task);
+    }
+
+
 }
